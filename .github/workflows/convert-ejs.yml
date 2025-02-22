@@ -1,0 +1,33 @@
+name: Convert EJS to HTML
+
+on:
+  push:
+    branches:
+      - main  # Runs the workflow on every push to the 'main' branch
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Convert EJS to HTML
+        run: node render.js
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Auto-convert EJS to HTML"
+          git push
